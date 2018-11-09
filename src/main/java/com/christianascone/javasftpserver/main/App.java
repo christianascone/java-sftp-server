@@ -6,80 +6,23 @@ import org.apache.commons.cli.*;
 import java.io.IOException;
 
 public class App {
+    private static final String HELP = "help";
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
     private static final String PORT = "port";
-
-    private static Option helpOption = Option.builder("h")
-            .longOpt("help")
-            .required(false)
-            .hasArg(false)
-            .build();
 
     private static int port;
     private static String username;
     private static String password;
 
-    private static boolean checkForHelp(String[] args) throws ParseException {
-        boolean hasHelp = false;
-
-        Options options = new Options();
-
-
-        try {
-            options.addOption(helpOption);
-
-            CommandLineParser parser = new DefaultParser();
-
-            CommandLine cmd = parser.parse(options, args);
-
-            if (cmd.hasOption(helpOption.getOpt())) {
-                hasHelp = true;
-            }
-
-        } catch (ParseException e) {
-            throw e;
-        }
-
-        return hasHelp;
-    }
 
     public static void main(String[] args) throws IOException {
-        Options options = new Options();
-
-        Option portOption = Option.builder("p")
-                .longOpt(PORT)
-                .required(true)
-                .hasArg(false)
-                .build();
-
-        Option usernameOption = Option.builder("u")
-                .longOpt("username")
-                .required(true)
-                .hasArg(false)
-                .build();
-
-        Option passwordOption = Option.builder("w")
-                .longOpt("password")
-                .required(true)
-                .hasArg(false)
-                .build();
-
-        options.addOption(helpOption);
-        options.addOption(portOption);
-        options.addOption(usernameOption);
-        options.addOption(passwordOption);
+        Options options = generateOptions();
 
         try {
-            if (checkForHelp(args)) {
-                HelpFormatter fmt = new HelpFormatter();
-                fmt.printHelp("Help", options);
-                return;
-            }
-
             CommandLineParser parser = new DefaultParser();
             CommandLine cmd = parser.parse(options, args);
-
+            if (checkForHelp(options, cmd)) return;
 
             if (cmd.hasOption(PORT))
                 port = Integer.parseInt(cmd.getOptionValue(PORT));
@@ -94,7 +37,46 @@ public class App {
             return; // Exit
         }
 
+        boolean running = true;
         SftpServerUtils.setupSftpServer(username, password, port);
+        while (running) {
+            // TODO: Add input check in order to interrupt
+        }
+
+    }
+
+    /**
+     * Check if user is checking help for the application
+     *
+     * @param options
+     * @param cmd
+     * @return
+     */
+    private static boolean checkForHelp(Options options, CommandLine cmd) {
+        if (cmd.hasOption(HELP)) {
+            HelpFormatter fmt = new HelpFormatter();
+            fmt.printHelp("Help", options);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Generates a list of {@link Option} including the help flag
+     *
+     * @return A list of {@link Option}
+     */
+    private static Options generateOptions() {
+        Options options = new Options();
+
+        options.addOption("h", HELP, false, "");
+
+        options.addOption("p", PORT, true, "");
+
+        options.addOption("u", USERNAME, true, "");
+
+        options.addOption("w", PASSWORD, true, "");
+        return options;
     }
 
 }
