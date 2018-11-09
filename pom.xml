@@ -6,7 +6,8 @@
 
     <groupId>com.christianascone</groupId>
     <artifactId>java-sftp-server</artifactId>
-    <version>0.1</version>
+    <version>0.1.0</version>
+    <packaging>jar</packaging>
     <build>
         <plugins>
             <plugin>
