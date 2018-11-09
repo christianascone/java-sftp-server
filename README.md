@@ -66,5 +66,5 @@ Distributed under the MIT license. See [``LICENSE``](https://github.com/christia
 5. Create a new Pull Request
 
 <!-- Markdown link & img dfn's -->
-[version-image]: https://img.shields.io/badge/version-0.0.0-brightgreen.svg
+[version-image]: https://img.shields.io/badge/version-0.1.0-brightgreen.svg
 [java-image]: https://img.shields.io/java/v/datadog-metrics.svg?style=flat-square
