@@ -50,7 +50,7 @@ public class App {
             String line = scan.nextLine();
             if(line != null && line.equalsIgnoreCase("q")){
                 SftpServerUtils.stopServer(serverBean);
-                return;
+                running = false;
             }
         }
 
