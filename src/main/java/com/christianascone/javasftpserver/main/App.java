@@ -1,6 +1,7 @@
 package com.christianascone.javasftpserver.main;
 
 import com.christianascone.javasftpserver.beans.SftpServerBean;
+import com.christianascone.javasftpserver.helpers.AsciiArtUtils;
 import com.christianascone.javasftpserver.helpers.SftpServerUtils;
 import org.apache.commons.cli.*;
 
@@ -20,6 +21,8 @@ public class App {
 
     public static void main(String[] args) throws IOException {
         Options options = generateOptions();
+
+        AsciiArtUtils.printProjectTitle();
 
         try {
             CommandLineParser parser = new DefaultParser();
