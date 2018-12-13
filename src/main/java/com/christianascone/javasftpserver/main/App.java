@@ -1,9 +1,12 @@
 package com.christianascone.javasftpserver.main;
 
+import com.christianascone.javasftpserver.beans.SftpServerBean;
+import com.christianascone.javasftpserver.helpers.AsciiArtUtils;
 import com.christianascone.javasftpserver.helpers.SftpServerUtils;
 import org.apache.commons.cli.*;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 public class App {
     private static final String HELP = "help";
@@ -18,6 +21,8 @@ public class App {
 
     public static void main(String[] args) throws IOException {
         Options options = generateOptions();
+
+        AsciiArtUtils.printProjectTitle();
 
         try {
             CommandLineParser parser = new DefaultParser();
@@ -38,9 +43,15 @@ public class App {
         }
 
         boolean running = true;
-        SftpServerUtils.setupSftpServer(username, password, port);
+        SftpServerBean serverBean = SftpServerUtils.setupSftpServer(username, password, port);
+        System.out.println("Input 'q' to quit.");
         while (running) {
-            // TODO: Add input check in order to interrupt
+            Scanner scan = new Scanner(System.in);
+            String line = scan.nextLine();
+            if(line != null && line.equalsIgnoreCase("q")){
+                SftpServerUtils.stopServer(serverBean);
+                running = false;
+            }
         }
 
     }

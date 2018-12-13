@@ -1,5 +1,6 @@
 package com.christianascone.javasftpserver.helpers;
 
+import com.christianascone.javasftpserver.beans.SftpServerBean;
 import com.christianascone.javasftpserver.main.App;
 import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.common.file.virtualfs.VirtualFileSystemFactory;
@@ -11,10 +12,12 @@ import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
 import org.apache.sshd.server.shell.ProcessShellCommandFactory;
 import org.apache.sshd.server.subsystem.sftp.SftpSubsystemFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class SftpServerUtils {
@@ -23,7 +26,7 @@ public class SftpServerUtils {
      *
      * @throws IOException If it cannot create a temp dir
      */
-    public static SshServer setupSftpServer(String username, String password, int port) throws IOException {
+    public static SftpServerBean setupSftpServer(String username, String password, int port) throws IOException {
         Path tempSftpDir = Files.createTempDirectory(App.class.getName());
 
         List<NamedFactory<UserAuth>> userAuthFactories = new ArrayList<>();
@@ -48,10 +51,14 @@ public class SftpServerUtils {
 
         sshd.start();
         System.out.println("Started SFTP server with root path: " + tempSftpDir.toFile().getAbsolutePath());
-        return sshd;
+        return new SftpServerBean(sshd, tempSftpDir);
     }
 
-    private static void stopServer(SshServer sshServer) throws IOException {
-        sshServer.stop();
+    public static void stopServer(SftpServerBean sftpServerBean) throws IOException {
+        sftpServerBean.getSshServer().stop();
+        Files.walk(sftpServerBean.getRootPath())
+                .sorted(Comparator.reverseOrder())
+                .map(Path::toFile)
+                .forEach(File::delete);
     }
 }

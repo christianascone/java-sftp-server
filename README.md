@@ -21,9 +21,11 @@ edit autoexec.bat
 
 ## Usage example
 
-A few motivating and useful examples of how your product can be used. Spice this up with code blocks and potentially more screenshots.
+You can start the sftp server with following command:
 
-_For more examples and usage, please refer to the [Wiki][wiki]._
+```sh
+java -jar java-sftp-server-x.y.z-jar-with-dependencies.jar -p 2222 -u user -w pass
+```
 
 ## Development setup
 
@@ -66,5 +68,5 @@ Distributed under the MIT license. See [``LICENSE``](https://github.com/christia
 5. Create a new Pull Request
 
 <!-- Markdown link & img dfn's -->
-[version-image]: https://img.shields.io/badge/version-0.2.0-brightgreen.svg
+[version-image]: https://img.shields.io/badge/version-0.3.0-brightgreen.svg
 [java-image]: https://img.shields.io/java/v/datadog-metrics.svg?style=flat-square
